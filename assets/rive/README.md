@@ -1,0 +1,1 @@
+Place authored `.riv` files here. Keep Rive integration platform-specific: the native runtime is `@rive-app/react-native`, while web uses `@rive-app/react-webgl2`. Do not import the native runtime from a shared web/native module.

@@ -1,0 +1,2 @@
+# Keep a flat dependency layout for Expo and native tooling.
+nodeLinker: hoisted

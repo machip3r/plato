@@ -1,0 +1,30 @@
+export const palette = {
+  ink: '#121A17',
+  room: '#17231E',
+  felt: '#1A4A38',
+  feltDeep: '#123526',
+  feltLight: '#2C634B',
+  paper: '#F3EEE3',
+  card: '#F8F3E9',
+  cardEdge: '#D9CEB9',
+  brass: '#C9A86A',
+  brassLight: '#E2C88D',
+  red: '#C33A31',
+  redDeep: '#A82D27',
+  white: '#FFFDF7',
+  cream: '#E9E0D0',
+  muted: '#A5B3A9',
+  line: 'rgba(231, 219, 195, 0.20)',
+  darkLine: 'rgba(18, 26, 23, 0.14)',
+  success: '#9DCF9D',
+};
+
+export const typography = {
+  display: 'PlayfairDisplay_900Black',
+  displayBold: 'PlayfairDisplay_700Bold',
+  cardIndex: 'Oswald_700Bold',
+  semibold: 'PlusJakartaSans_600SemiBold',
+  bold: 'PlusJakartaSans_700Bold',
+  extraBold: 'PlusJakartaSans_800ExtraBold',
+  body: 'PlusJakartaSans_400Regular',
+};
