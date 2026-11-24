@@ -1,1 +1,1 @@
-export { default } from '../components/GameScreen';
+export { default } from '../features/table/screens/GameScreen';

@@ -112,7 +112,7 @@ Los balances son por jugador y el Plato es compartido. No hay depósitos, retiro
 
 ## Implementación y alcance actual
 
-Las reglas, secuencia de turnos, robos, decisiones de bots y contabilidad están en `src/game` como TypeScript independiente de la interfaz. La pantalla y los controles están en `src/components`, con lógica de sesión local en `src/hooks/useLocalMatch.ts`. La estructura apunta a compartir el núcleo entre web y móvil y permitir una futura autoridad de servidor, pero multijugador en red, cuentas y persistencia no forman parte de la versión actual.
+Las reglas, secuencia de turnos, robos, decisiones de bots y contabilidad están en `src/game` como TypeScript independiente de la interfaz. La pantalla y los controles están en `src/features/table`, con lógica de sesión local en `src/features/table/hooks/useLocalMatch.ts` y primitivas visuales compartidas en `src/ui`. La distribución y sus responsabilidades se documentan en `ARCHITECTURE.md`. La estructura apunta a compartir el núcleo entre web y móvil y permitir una futura autoridad de servidor, pero multijugador en red, cuentas y persistencia no forman parte de la versión actual.
 
 La dirección visual del producto combina tipografía de cartel suizo con una sala de cartas cálida: mesa ovalada de fieltro, madera, latón, señales rojas y retratos expresivos. La composición prioriza móvil y pone la mesa al centro, con el Plato y los participantes a la vista y las acciones al alcance del pulgar.
 

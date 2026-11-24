@@ -6,6 +6,7 @@ import {
   REQUIRED_ANTE,
 } from './rules';
 import { MAX_PLAYERS, MIN_PLAYERS } from './model';
+import { orderedHand } from './cards';
 import type { BetResolution, Card, Hand, Player, RoundState } from './model';
 
 export interface StartRoundInput {
@@ -37,10 +38,7 @@ export function startRound(input: StartRoundInput): RoundState {
   const hands: Record<string, Hand> = {};
   let cardIndex = 0;
   for (const player of participants) {
-    hands[player.id] = {
-      first: input.dealtCards[cardIndex],
-      second: input.dealtCards[cardIndex + 1],
-    };
+    hands[player.id] = orderedHand(input.dealtCards[cardIndex], input.dealtCards[cardIndex + 1]);
     cardIndex += 2;
   }
 

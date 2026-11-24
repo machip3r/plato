@@ -1,5 +1,5 @@
 import { useFonts } from 'expo-font';
-import { fontAssets } from '../components/fonts';
+import { fontAssets } from '../ui/fonts';
 import { ActivityIndicator, View } from 'react-native';
 import { Stack } from 'expo-router';
 import 'react-native-reanimated';
