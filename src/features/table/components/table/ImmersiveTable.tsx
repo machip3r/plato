@@ -34,6 +34,8 @@ export function ImmersiveTable({ match, queuedAction, queueNotice, cancelQueuedA
   const [seatGuide, setSeatGuide] = useState<string>();
   const [burst, setBurst] = useState<{ id: number; type: 'bet' | 'pass' }>();
   const clearBurst = useCallback(() => setBurst(undefined), []);
+  const [reactionFinished, setReactionFinished] = useState(false);
+  const completeReaction = useCallback(() => setReactionFinished(true), []);
   const pointerStart = useRef<{ x: number; y: number; time: number } | null>(null);
   const [swipeOffset] = useState(() => new Animated.Value(0));
   const [handLift] = useState(() => new Animated.Value(0));
@@ -85,6 +87,9 @@ export function ImmersiveTable({ match, queuedAction, queueNotice, cancelQueuedA
   // The HUD row rides well above the hand so its meters never sit on the card corners;
   // it climbs a little further while the three-card wager hand is up.
   const hudBottom = handHeight * 0.77 + 72 + (raisedHand ? 30 : 0);
+  // Reserve room above the balance, and show the round recap after the reaction fades.
+  const reactionTop = Math.max(16, Math.min(size.height * 0.52, size.height - hudBottom - (meterSize + 10) - 104));
+  const reactionVisible = Boolean((pity || cheer) && !reducedMotion && !reactionFinished);
 
   useEffect(() => {
     const animation = Animated.timing(handLift, { toValue: raisedHand ? 1 : 0, delay: reducedMotion ? 0 : raisedHand ? 400 : 0, duration: reducedMotion ? 0 : 1050, easing: Easing.out(Easing.cubic), useNativeDriver: true });
@@ -226,8 +231,8 @@ export function ImmersiveTable({ match, queuedAction, queueNotice, cancelQueuedA
       </BlurTargetView>
       {presentation && <RoundPresentation key={`${presentation.type}-${presentation.actorId}-${presentation.next.roundNumber}-${presentation.next.round?.bets.length}`} type={presentation.type} next={presentation.next} actorId={presentation.actorId} complete={completePresentation} width={size.width} height={size.height} />}
       {burst && <SwipeBurst key={burst.id} type={burst.type} width={size.width} height={size.height} complete={clearBurst} />}
-      {pity && !reducedMotion && <PityBurst key={`pity-${pity}`} width={size.width} height={size.height} />}
-      {cheer && !reducedMotion && <WinBurst key="cheer" width={size.width} height={size.height} />}
+      {pity && !reducedMotion && <PityBurst key={`pity-${pity}`} width={size.width} height={size.height} top={reactionTop} complete={completeReaction} />}
+      {cheer && !reducedMotion && <WinBurst key="cheer" width={size.width} height={size.height} top={reactionTop} complete={completeReaction} />}
       {hudGuide && <HudGuide guide={hudGuide} onClose={() => setHudGuide(undefined)} style={{ position: 'absolute', alignSelf: 'center', zIndex: 12, bottom: hudBottom + 58, width: Math.min(320, hudRowWidth + 56) }} />}
       {seatGuide && <View pointerEvents="box-none" style={[StyleSheet.absoluteFill, { zIndex: 12 }]}><PlayerGuideCard match={match} playerId={seatGuide} onClose={() => setSeatGuide(undefined)} style={{ position: 'absolute', alignSelf: 'center', bottom: size.height * 0.52, width: 272 }} /></View>}
       <View pointerEvents="none" style={[s.pot, { bottom: size.height - (deckPosition(size.width, size.height).y - deckWidth * 0.695) - Math.round(deckWidth * 1.39 * 0.28), transform: [{ scale: potScale }], transformOrigin: 'bottom' }]}>
@@ -240,7 +245,7 @@ export function ImmersiveTable({ match, queuedAction, queueNotice, cancelQueuedA
           </View>
         </View>
       </View>
-      {ended && <View pointerEvents="none" style={[s.floatResult, { bottom: hudBottom + 60 }]}><Text style={s.floatResultText}>{`${round.winnerId ? round.winnerId === 'human' ? 'Ganaste la apuesta' : `${match.players.find(p => p.id === round.winnerId)?.name} ganó la apuesta` : passed ? 'Pasaste · ronda cerrada' : 'Ronda cerrada'}${latest ? ` · ${latest.amount} ${latest.amount === 1 ? 'ficha' : 'fichas'}` : ''}`}</Text></View>}
+      {ended && !reactionVisible && <View pointerEvents="none" accessibilityLiveRegion="polite" style={[s.floatResult, { bottom: hudBottom + 60 }]}><Text style={s.floatResultText}>{`${round.winnerId ? round.winnerId === 'human' ? 'Ganaste la apuesta' : `${match.players.find(p => p.id === round.winnerId)?.name} ganó la apuesta` : passed ? 'Pasaste · ronda cerrada' : 'Ronda cerrada'}${latest ? ` · ${latest.amount} ${latest.amount === 1 ? 'ficha' : 'fichas'}` : ''}`}</Text></View>}
       {ended && <View style={[s.floatActions, { bottom: insets.bottom + 18, width: hudRowWidth }]}>
         {spectating ? <CtaButton label={joinQueued ? 'Cancelar entrada' : 'Entrar a la ronda'} arrow={false} disabled={human.balance < 1} height={meterSize + 10} onPress={join} /> : isHost ? <CtaButton label="Siguiente ronda" disabled={busy} height={meterSize + 10} onPress={next} /> : <RoundWaitBar hostName={hostName} avatar={hostAvatar} round={match.roundNumber + 1} getDeadline={getNextRoundAt} />}
       </View>}

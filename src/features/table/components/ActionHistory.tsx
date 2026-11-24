@@ -14,7 +14,7 @@ export function ActionHistory({ match, close }: { match: LocalMatch; close: () =
   return <Modal transparent animationType="slide" onRequestClose={close}>
     <View style={s.scrim}>
       <View style={s.sheet} accessibilityViewIsModal>
-        <View style={s.heading}><View><Text style={s.title}>Historial de la mesa</Text><Text style={s.subtitle}>La partida continúa mientras consultas.</Text></View><Pressable accessibilityRole="button" accessibilityLabel="Cerrar historial" onPress={close} style={s.close}><Text style={s.closeText}>×</Text></Pressable></View>
+        <View style={s.heading}><View><Text style={s.title}>Historial de la mesa</Text><Text style={s.subtitle}>{match.status === 'closed' ? 'Registro de la partida terminada.' : 'La partida continúa mientras consultas.'}</Text></View><Pressable accessibilityRole="button" accessibilityLabel="Cerrar historial" onPress={close} style={s.close}><Text style={s.closeText}>×</Text></Pressable></View>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={s.filters} contentContainerStyle={{ gap: 7 }}>
           {[{ id: undefined, name: 'Todos' }, ...match.players].map(player => <Pressable accessibilityRole="button" accessibilityState={{ selected: selected === player.id }} key={player.id ?? 'all'} onPress={() => setSelected(player.id)} style={[s.filter, selected === player.id && s.filterActive]}><Text style={[s.filterText, selected === player.id && s.filterTextActive]}>{player.name}</Text></Pressable>)}
         </ScrollView>

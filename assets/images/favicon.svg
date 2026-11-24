@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 64 64">
+  <title>PLATO</title>
+  <defs>
+    <clipPath id="mark">
+      <rect width="64" height="64" rx="10" />
+    </clipPath>
+  </defs>
+  <g clip-path="url(#mark)">
+    <path fill="#C33A31" d="M0 0h64v64H0z" />
+    <path stroke="#FAF6EB" stroke-width="12" d="M32 32 80-29M32 32-16 93" />
+  </g>
+</svg>

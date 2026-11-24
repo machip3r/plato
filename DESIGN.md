@@ -76,3 +76,12 @@ When any bet wins, every remaining concealed seat reveals its pair with the shar
 ### Table feedback and first hand
 
 Header settings expose independent Sound and Vibration switches, persisted locally with the dismissed first-hand guide in `plato.table-preferences.v1`. Muting stops in-flight card sounds. Haptics are brief and reserved for the human's received cards and accepted pass/bet actions; bot turns stay quiet to the touch. Unsupported feedback never interrupts play. Before the first-ever deal, a dismissible paper dialog explains strict-between wins with real 3–7–J cards and the equal-endpoint loss rule. Completing or skipping it starts the requested match; future matches start directly. The same example remains available from settings. Settings use the incumbent paper, green and brass palette, accessible switches, safe close focus and scrollable content on small screens.
+
+## Match entry menu
+The landing owns the introduction. `/play` opens a compact felt menu with the gameplay green header, gold stitched edge, player portraits, a bounded 1–7 bot stepper, a random-count action and a gold deal button. No marketing headline or oversized cream table preview. Table settings are available inside the game only. The landing header uses stronger light blur and a denser translucent paper layer while scrolling. URL segments are English; visible game copy remains Spanish.
+
+## Reaction and round recap priority
+At round end, reserve a vertical area above the balance HUD for “Ni modo” / “¡Enhorabuena!” and their particles. The permanent wager recap appears only after that reaction completes, using the animation completion callback rather than a second timer. With reduced motion, the recap appears immediately. The landing's web glass uses a platform-specific 48 px backdrop blur while keeping foreground controls sharp; native uses Expo BlurView.
+
+## Finished match and navigation
+The final scoreboard shares TableSurface with the match menu: felt, gold stitching and the existing player portraits. Keep balances, net changes and any unclaimed Plato visible in a scrollable list, with a fixed gold return-to-menu action and a secondary replay action. Returning to the menu retains the closed match for history until a new match starts. The PLATO logo returns to the landing; if any local match/history would be discarded, explain that scope in the existing accessible confirmation dialog first.

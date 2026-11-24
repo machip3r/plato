@@ -7,6 +7,7 @@ src/
 ├── app/                       # Rutas y layout de Expo Router
 ├── game/                      # Motor de reglas en TypeScript puro
 ├── features/
+│   ├── home/                   # Portada, modos y demostración interactiva
 │   └── table/
 │       ├── screens/           # Pantalla principal y entrada web/native
 │       ├── components/
@@ -29,6 +30,8 @@ scripts/                       # Herramientas de mantenimiento de recursos
 
 ## Responsabilidades y dependencias
 
+- `app/index.tsx` abre la portada de `features/home`; `app/play.tsx` conecta con el juego existente. El contrato de la portada está en `src/features/home/README.md`.
+
 - `game/` no importa React, componentes, almacenamiento ni APIs del dispositivo. Las reglas y la contabilidad se mantienen aquí para poder compartirlas con una futura autoridad de servidor.
 - `features/table/screens/PlatoGameScreen.tsx` coordina la sesión, los diálogos y las secciones de pantalla. La preparación, cabecera y estados de partida tienen componentes propios.
 - `features/table/hooks/useLocalMatch.ts` coordina comandos, turnos automáticos, acciones anticipadas y el momento de confirmar una animación. Los tipos de presentación viven en `types.ts`, para que las animaciones no dependan del hook.
@@ -44,7 +47,9 @@ scripts/                       # Herramientas de mantenimiento de recursos
 | Reglas, probabilidades o bots | `src/game/` |
 | Turnos, cola de acciones o anfitrión | `src/features/table/hooks/useLocalMatch.ts` |
 | Composición general de la pantalla | `src/features/table/screens/PlatoGameScreen.tsx` |
-| Preparación de partida | `src/features/table/components/TableSetup.tsx` |
+| Resultados y regreso al menú | `src/features/table/components/MatchSummary.tsx` |
+| Superficie común de menús y resultados | `src/features/table/components/table/TableSurface.tsx` |
+| Preparación de partida | `src/features/table/components/TableMenu.tsx` |
 | Layout de mesa y posiciones | `src/features/table/components/table/` |
 | Aspecto de cartas | `src/features/table/components/cards/` |
 | Reparto y efectos visuales | `src/features/table/components/animations/` |
@@ -53,6 +58,8 @@ scripts/                       # Herramientas de mantenimiento de recursos
 | Fuentes y paleta | `src/ui/fonts.ts`, `src/ui/theme.ts` |
 
 ## Convenciones
+
+- Escribir siempre los segmentos de URL en inglés (por ejemplo, `/play`); conservar los textos visibles del producto en español.
 
 - Colocar un componente en la funcionalidad que lo utiliza. Moverlo a `ui/` cuando sea compartido e independiente del juego.
 - Mantener los estilos junto al componente que los usa. Los componentes extraídos conservan únicamente sus propios estilos.

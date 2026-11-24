@@ -1,1 +1,1 @@
-export { default } from '../features/table/screens/GameScreen';
+export { default } from '../features/home/screens/LandingScreen';

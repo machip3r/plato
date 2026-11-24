@@ -3,6 +3,7 @@ import { fontAssets } from '../ui/fonts';
 import { ActivityIndicator, View } from 'react-native';
 import { Stack } from 'expo-router';
 import 'react-native-reanimated';
+import { PlatoAuthProvider } from '../features/auth/PlatoAuthProvider';
 
 export {
   ErrorBoundary,
@@ -12,5 +13,9 @@ export default function RootLayout() {
   const [loaded, error] = useFonts(fontAssets);
   if (error) throw error;
   if (!loaded) return <View style={{ flex: 1, backgroundColor: '#F3EEE3', alignItems: 'center', justifyContent: 'center' }}><ActivityIndicator color="#C33A31" accessibilityLabel="Cargando PLATO" /></View>;
-  return <Stack screenOptions={{ headerShown: false }} />;
+  return (
+    <PlatoAuthProvider>
+      <Stack screenOptions={{ headerShown: false }} />
+    </PlatoAuthProvider>
+  );
 }

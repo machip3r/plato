@@ -1,17 +1,18 @@
 import { useRef, type ComponentRef } from 'react';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 
-export function CloseMatchDialog({ cancel, confirm }: { cancel: () => void; confirm: () => void }) {
+type Props = { cancel: () => void; confirm: () => void; title?: string; description?: string; confirmLabel?: string; cancelLabel?: string };
+export function CloseMatchDialog({ cancel, confirm, title = '¿Cerrar esta partida?', description = 'La mesa termina para todos. Podrás consultar el resultado y el historial, pero no reanudarla. Una nueva partida reinicia las fichas.', confirmLabel = 'Cerrar partida', cancelLabel = 'Seguir jugando' }: Props) {
   const safeAction = useRef<ComponentRef<typeof View>>(null);
   return <Modal transparent animationType="fade" onRequestClose={cancel} onShow={() => safeAction.current?.focus()}>
     <View style={s.scrim}>
-      <Pressable style={StyleSheet.absoluteFill} onPress={cancel} accessibilityLabel="Seguir jugando" accessibilityRole="button" />
+      <Pressable style={StyleSheet.absoluteFill} onPress={cancel} accessibilityLabel={cancelLabel} accessibilityRole="button" />
       <View style={s.dialog} accessibilityViewIsModal>
-        <Text accessibilityRole="header" style={s.title}>¿Cerrar esta partida?</Text>
-        <Text style={s.body}>La mesa termina para todos. Podrás consultar el resultado y el historial, pero no reanudarla. Una nueva partida reinicia las fichas.</Text>
+        <Text accessibilityRole="header" style={s.title}>{title}</Text>
+        <Text style={s.body}>{description}</Text>
         <View style={s.actions}>
-          <Pressable ref={safeAction} onPress={cancel} accessibilityRole="button" style={s.cancel}><Text style={s.cancelText}>Seguir jugando</Text></Pressable>
-          <Pressable onPress={confirm} accessibilityRole="button" style={s.confirm}><Text style={s.confirmText}>Cerrar partida</Text></Pressable>
+          <Pressable ref={safeAction} onLayout={() => safeAction.current?.focus()} onPress={cancel} accessibilityRole="button" style={s.cancel}><Text style={s.cancelText}>{cancelLabel}</Text></Pressable>
+          <Pressable onPress={confirm} accessibilityRole="button" style={s.confirm}><Text style={s.confirmText}>{confirmLabel}</Text></Pressable>
         </View>
       </View>
     </View>

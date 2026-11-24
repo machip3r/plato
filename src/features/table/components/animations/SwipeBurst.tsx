@@ -23,20 +23,23 @@ export function SwipeBurst({ type, width, height, complete }: { type: 'bet' | 'p
 }
 const s = StyleSheet.create({ layer: { ...StyleSheet.absoluteFill, zIndex: 9 } });
 
+type ReactionBurstProps = { width: number; height: number; top?: number; complete?: () => void };
+
 /** One-shot copy burst: a centered pill with emoji drifting around it. */
-function WordBurst({ width, height, complete, title, sub, emojis, titleColor, pillBorder }: { width: number; height: number; complete?: () => void; title: string; sub: string; emojis: string[]; titleColor: string; pillBorder: string }) {
+function WordBurst({ width, height, top, complete, title, sub, emojis, titleColor, pillBorder }: ReactionBurstProps & { title: string; sub: string; emojis: string[]; titleColor: string; pillBorder: string }) {
   const [progress] = useState(() => new Animated.Value(0));
   useEffect(() => {
     const animation = Animated.timing(progress, { toValue: 1, duration: 3200, easing: Easing.out(Easing.cubic), useNativeDriver: true });
     animation.start(({ finished }) => { if (finished) complete?.(); });
     return () => animation.stop();
   }, [progress, complete]);
+  const originY = top ?? height * 0.52;
   return <View pointerEvents="none" accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={s.layer}>
-    <Animated.View style={[pityStyles.pityCopy, { top: height * 0.52, borderColor: pillBorder, opacity: progress.interpolate({ inputRange: [0, 0.12, 0.78, 1], outputRange: [0, 1, 1, 0] }), transform: [{ scale: progress.interpolate({ inputRange: [0, 0.12, 0.85, 1], outputRange: [0.7, 1.06, 1.02, 1.14] }) }] }]}>
+    <Animated.View style={[pityStyles.pityCopy, { top: originY, borderColor: pillBorder, opacity: progress.interpolate({ inputRange: [0, 0.12, 0.78, 1], outputRange: [0, 1, 1, 0] }), transform: [{ scale: progress.interpolate({ inputRange: [0, 0.12, 0.85, 1], outputRange: [0.7, 1.06, 1.02, 1.14] }) }] }]}>
       <Text allowFontScaling={false} style={[pityStyles.pityTitle, { color: titleColor }]}>{title}</Text>
       <Text allowFontScaling={false} style={pityStyles.pityBody}>{sub}</Text>
     </Animated.View>
-    {Array.from({ length: 7 }, (_, index) => <Animated.Text key={index} style={{ position: 'absolute', left: width / 2 + (index - 3) * 40, top: height * 0.55, fontSize: index % 2 ? 24 : 28, opacity: progress.interpolate({ inputRange: [0, 0.1, 0.62, 1], outputRange: [0, 1, 0.9, 0] }), transform: [
+    {Array.from({ length: 7 }, (_, index) => <Animated.Text key={index} style={{ position: 'absolute', left: width / 2 + (index - 3) * 40, top: originY + 24, fontSize: index % 2 ? 24 : 28, opacity: progress.interpolate({ inputRange: [0, 0.1, 0.62, 1], outputRange: [0, 1, 0.9, 0] }), transform: [
       { translateX: progress.interpolate({ inputRange: [0, 1], outputRange: [0, (index - 3) * 20] }) },
       { translateY: progress.interpolate({ inputRange: [0, 1], outputRange: [10, -(52 + index % 3 * 24)] }) },
       { rotate: progress.interpolate({ inputRange: [0, 1], outputRange: ['0deg', `${index % 2 ? 14 : -16}deg`] }) },
@@ -45,13 +48,13 @@ function WordBurst({ width, height, complete, title, sub, emojis, titleColor, pi
 }
 
 /** One-shot lament when a likely win slips away. */
-export function PityBurst({ width, height, complete }: { width: number; height: number; complete?: () => void }) {
-  return <WordBurst width={width} height={height} complete={complete} title="Ni modo" sub="Tenías muchas probabilidades…" emojis={['😩', '😖']} titleColor="#FFB6A4" pillBorder="rgba(242,203,107,0.45)" />;
+export function PityBurst({ width, height, top, complete }: ReactionBurstProps) {
+  return <WordBurst width={width} height={height} top={top} complete={complete} title="Ni modo" sub="Tenías muchas probabilidades…" emojis={['😩', '😖']} titleColor="#FFB6A4" pillBorder="rgba(242,203,107,0.45)" />;
 }
 
 /** One-shot celebration when the human takes the Plato. */
-export function WinBurst({ width, height, complete }: { width: number; height: number; complete?: () => void }) {
-  return <WordBurst width={width} height={height} complete={complete} title="¡Enhorabuena!" sub="El Plato es tuyo" emojis={['🎉', '🥳', '🪙']} titleColor="#F2CB6B" pillBorder="rgba(220,255,189,0.6)" />;
+export function WinBurst({ width, height, top, complete }: ReactionBurstProps) {
+  return <WordBurst width={width} height={height} top={top} complete={complete} title="¡Enhorabuena!" sub="El Plato es tuyo" emojis={['🎉', '🥳', '🪙']} titleColor="#F2CB6B" pillBorder="rgba(220,255,189,0.6)" />;
 }
 const pityStyles = StyleSheet.create({
   pityCopy: { position: 'absolute', alignSelf: 'center', alignItems: 'center', backgroundColor: 'rgba(18,57,27,0.95)', borderRadius: 18, paddingHorizontal: 24, paddingVertical: 14, borderWidth: 2, shadowColor: '#061704', shadowOffset: { width: 0, height: 6 }, shadowOpacity: 0.5, shadowRadius: 14, elevation: 8 },

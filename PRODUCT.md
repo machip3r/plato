@@ -62,3 +62,7 @@ Respect system reduced-motion preferences and support disabling sound when sound
 The human can leave their seat from the header, choose a successor host and decide whether to watch. During a round, any remaining turn passes automatically and the already-paid ante stays in the Plato; no further antes are charged as a spectator. The local successor is one of the bots. Spectators retain their existing balance and history, do not receive hands or pay the ante, and can queue entry for the next round. A bot host starts the next round automatically after a seven-second break while the table is being watched. With fewer than two funded participants, the table waits and a funded spectator can rejoin. Leaving the game screen pauses the local simulation until returning to watch; this is in-memory state, not a network session.
 
 At zero balance, the human action buttons are hidden and any remaining human turn automatically passes. Leaving waits for an in-flight card animation to finish; the host can still close the entire table through the separate confirmed close action.
+
+## Home and planned table modes
+
+The home page presents PLATO with an interactive illustrative hand and an entry to the playable local bot mode at `/play`. Private invitation-based rooms and public tables are planned online modes; the landing labels both as coming soon and does not simulate available rooms or connected players.

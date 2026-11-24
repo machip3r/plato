@@ -2,17 +2,19 @@ import { Pressable, StyleSheet, Text, View, useWindowDimensions } from 'react-na
 import { TableIcon } from '../../../ui/TableIcon';
 import { palette } from '../../../ui/theme';
 
-export function TableHeader({ label, roundNumber, leaveAction, historyAction, settingsAction }: { label: string; roundNumber?: number; leaveAction?: () => void; historyAction?: () => void; settingsAction: () => void }) {
+export function TableHeader({ label, roundNumber, leaveAction, historyAction, settingsAction, homeAction, immersive = false }: { label: string; roundNumber?: number; leaveAction?: () => void; historyAction?: () => void; settingsAction: () => void; homeAction?: () => void; immersive?: boolean }) {
   const { width } = useWindowDimensions();
   const playing = roundNumber !== undefined;
-  return <View style={[styles.header, playing && styles.gameHeader]}>
-    <View style={styles.brandLockup}>
+  const dark = playing || immersive;
+  return <View style={[styles.header, dark && styles.gameHeader]}>
+    <Pressable disabled={!homeAction} onPress={homeAction} accessibilityRole={homeAction ? 'button' : undefined} accessibilityLabel={homeAction ? 'Volver al inicio de PLATO' : undefined} style={[styles.brandLockup, homeAction && { minHeight: 44 }]}>
+      {homeAction && !playing && <Text style={{ color: dark ? '#F0E7C8' : palette.ink, fontSize: 24 }}>‹</Text>}
       <View style={[styles.brandMark, playing && { width: 16, height: 16 }]}><View style={styles.brandMarkSlash} /></View>
-      <View><Text style={[styles.brand, playing && styles.gameBrand, playing && width < 360 && { fontSize: 17 }]}>PLATO</Text>{!playing && <Text style={styles.roomLabel}>{label}</Text>}</View>
-    </View>
+      <View><Text style={[styles.brand, dark && styles.gameBrand, playing && width < 360 && { fontSize: 17 }]}>PLATO</Text>{!playing && <Text style={[styles.roomLabel, dark && { color: '#E3CE94' }]}>{label}</Text>}</View>
+    </Pressable>
     {playing && <View pointerEvents="none" style={styles.headerCenter}><View style={styles.headerRound}><Text style={styles.headerRoundLabel}>RONDA</Text><Text style={styles.headerRoundNumber}>{String(roundNumber).padStart(2, '0')}</Text></View></View>}
     <View style={styles.headerRight}>
-      <Pressable accessibilityRole="button" accessibilityLabel="Ajustes de sonido y vibración" onPress={settingsAction} style={({ pressed }) => [styles.headerIconButton, { minWidth: 44, height: 44 }, pressed && { opacity: 0.7 }]}><TableIcon name="settings" color={playing ? '#E7EBDD' : '#294124'} /></Pressable>
+      <Pressable accessibilityRole="button" accessibilityLabel="Ajustes de sonido y vibración" onPress={settingsAction} style={({ pressed }) => [styles.headerIconButton, { minWidth: 44, height: 44 }, pressed && { opacity: 0.7 }]}><TableIcon name="settings" color={dark ? '#E7EBDD' : '#294124'} /></Pressable>
       {historyAction && <Pressable accessibilityRole="button" accessibilityLabel="Ver historial de acciones" onPress={historyAction} style={({ pressed }) => [styles.headerIconButton, pressed && { opacity: 0.7 }]}><TableIcon name="history" color="#E7EBDD" />{width >= 440 && <Text style={styles.historyLabel}>Historial</Text>}</Pressable>}
       {leaveAction && <Pressable onPress={leaveAction} style={({ pressed }) => [styles.headerExit, pressed && { opacity: 0.7 }]} accessibilityRole="button" accessibilityLabel="Salir de la partida" accessibilityHint="Elige un nuevo anfitrión si corresponde y decide si quieres observar."><TableIcon name="exit" color="#F2A096" /></Pressable>}
     </View>
