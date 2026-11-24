@@ -1,2 +1,8 @@
 # Keep a flat dependency layout for Expo and native tooling.
 nodeLinker: hoisted
+
+# These postinstall scripts only print informational/funding messages.
+# Explicit denials keep strict dependency-script checks enabled in CI.
+allowBuilds:
+  browser-tabs-lock: false
+  core-js: false
